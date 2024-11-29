@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void startrek() {
+    const double R = 13584000 / 2; // Radius of Vulcan in meters
+    const double G = 6.67e-11; // Gravitational constant in m^3/kg/s^2
+    const double ag = 13.73; // Acceleration due to gravity at Vulcan's surface in m/s^2
+    double r = 2000000 + R; // Total distance to the center in meters
+    double M = (ag * R * R) / G; // Mass of Vulcan in kilograms
+    double v = 0; // Initial velocity in m/s
+    double t = 0; // Time in seconds
+    const double pop = 7000000000; // Population of Vulcans
+    const double dt = 0.00001; // Time interval in seconds, since it's c++ we can run this code very fast
+
+    // Descent above the surface
+    while (r > R) {
+        double a = (G*M)/(r*r); // Gravity decreases with square of distance
+        v += a * dt;
+        r -= v * dt;
+        t += dt;
+    }
+
+    // Descent within the planet's interior
+    while (r > 0) {
+        // Inside the planet, gravity decreases linearly with distance to the center
+        double a = (G*M*r)/(R*R*R);
+        v += a * dt;
+        r -= v * dt;
+        t += dt;
+    }
+
+    // Calculate evacuation rate
+    double evac_rate = pop / t;
+    cout << "Final Velocity: " << v << " m/s" << endl;
+    cout << "Total time before probe reaches centre: " << t << " seconds" << endl;
+    cout << "Evacuation rate: " << evac_rate << " Vulcans per second" << endl;
+}
+
+int main() {
+    startrek();
+    return 0;
+}
